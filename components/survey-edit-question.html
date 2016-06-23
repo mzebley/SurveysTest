@@ -1,0 +1,133 @@
+﻿<easy-dismissal class="blackened"></easy-dismissal>
+<question-editor class="editor" id="container">
+    <side-bar></side-bar>
+    <z-tab-menu z-full-tab>
+        <z-tab-buttons>
+            <h3 ng-class="{'current': showTab == 'edit'}" ng-click="showTab = 'edit'"><a href="">Edit</a></h3>
+            <h3 ng-class="{'current': showTab == 'options'}" ng-if="question.Type != 'Content'" ng-click="$parent.showTab = 'options'"><a href="">Options</a></h3>
+            <h3 ng-class="{'current': showTab == 'logic'}" ng-click="showTab = 'logic'"><a href="">Logic</a></h3>
+        </z-tab-buttons>
+        <z-tab-content ng-class="{'appear': $parent.showTab == 'edit'}" ng-if="(question.Type != 'Multiple' || question.Type == 'Matrix') && showTab == 'edit'">
+            <h4 style="font-size: 18px">{{question.Type}}</h4>
+            <p style="margin-top: 5px">
+                <textarea froala="universal.froalaOptions" ng-model="question.Body"></textarea>
+            </p>
+        </z-tab-content>
+        <z-tab-content ng-class="{'appear': $parent.showTab == 'edit'}" ng-if="question.Type == 'Multiple' && showTab == 'edit'">
+            <h4 style="font-size: 18px">{{question.Type}}</h4>
+            <p style="margin-top: 5px">
+                <textarea froala="universal.froalaOptions" ng-model="question.Body"></textarea>
+            </p>
+            <p>
+                Answers:
+                <z-btn class="normal-btn" btn-text="Add" ng-click="addAnswer()"></z-btn>
+            </p>
+            <div ng-repeat="answer in question.Answers track by $index">
+                <p ng-if="$index != 0 && $index != 1">
+                    <z-btn class="cancel-btn" btn-text="Remove" ng-click="removeAnswer($index)"></z-btn>
+                </p>
+                <p style="margin-top: 5px">
+                    <textarea froala="universal.froalaOptions" ng-model="answer.Content"></textarea>
+                </p>
+            </div>
+        </z-tab-content>
+        <z-tab-content ng-class="{'appear': $parent.showTab == 'edit'}" ng-if="question.Type == 'Matrix' && showTab == 'edit'">
+            <p>
+                <z-btn class="normal-btn" btn-text="Add Row" ng-click="addRow()"></z-btn>
+                <z-btn class="normal-btn" btn-text="Add Column" ng-click="addColumn()"></z-btn>
+            </p>
+            <h4 style="font-size: 18px">ROWS:</h4>
+            <div ng-repeat="row in question.MatrixJSON track by $index">
+                <z-icon-btn ng-if="$index != 0" style="margin-top:0" title="Delete Row" btn-background="rgba(250, 219, 216, .975)" btn-icon-color="#e54839" btn-icon="survey-trash" ng-click="$parent.removeRow($index)"></z-icon-btn>
+                <p style="margin-top: 5px;">
+                    <textarea froala="universal.froalaOptions" ng-model="row.RowName"></textarea>
+                </p>
+            </div>
+            <h4 style="font-size: 18px">COLUMNS:</h4>
+            <div ng-repeat="column in question.MatrixJSON[0].Columns track by $index">
+                <z-icon-btn ng-if="$index != 0" style="margin-top:0" title="Delete Column" btn-background="rgba(250, 219, 216, .975)" btn-icon-color="#e54839" btn-icon="survey-trash" ng-click="$parent.removeColumn($index)"></z-icon-btn>
+                <p style="margin-top: 5px;">
+                    <textarea froala="universal.froalaOptions" ng-model="column.ColumnName"></textarea>
+                </p>
+            </div>
+        </z-tab-content>
+        <z-tab-content ng-class="{'appear': $parent.showTab == 'options'}" ng-if="showTab == 'options'">
+            <z-check-list style="border:1px solid #ddd;width:auto">
+                <div>
+                    <z-checkbox checkbox-id="requireQuestion" checkbox-model="question.Options.Required"></z-checkbox>
+                    <p><b>REQUIRE</b> an answer to this question.</p>
+                </div>
+                <div ng-if="question.Type == 'Availability'" style="max-width: 1200px">
+                    <z-full-calendar z-model="question.Options.AvailableDates"></z-full-calendar>
+                    <p><b>AVAILABLE</b> dates for users to give there availability.</p>
+                </div>
+                <div ng-if="question.Type == 'Multiple'">
+                    <z-checkbox checkbox-id="multiAllowed" checkbox-model="question.Options.MultiSelect"></z-checkbox>
+                    <p><b>MULTIPLE</b> selection allowed.</p>
+                </div>
+                <div ng-if="question.Type == 'Multiple'">
+                    <z-checkbox checkbox-id="randomize" checkbox-model="question.Options.RandomOrder"></z-checkbox>
+                    <p><b>RANDOMIZE</b> order of answers.</p>
+                </div>
+                <div ng-if="question.Type == 'Date'">
+                    <z-checkbox checkbox-id="allowTime" checkbox-model="question.Options.IncludeTime"></z-checkbox>
+                    <p><b>TIME</b> in the date picker.</p>
+                </div>
+                <div ng-if="question.Type == 'Matrix'">
+                    <z-checkbox checkbox-id="multiRow" ng-click="nonSingleSelection()" checkbox-model="question.Options.SingleSelectRow"></z-checkbox>
+                    <p><b>SINGLE ROW</b> selection only.</p>
+                </div>
+                <div ng-if="question.Type == 'Matrix'">
+                    <z-checkbox checkbox-id="multiColumn" ng-click="nonSingleSelection()" checkbox-model="question.Options.SingleSelectColumn"></z-checkbox>
+                    <p><b>SINGLE COLUMN</b> selection only..</p>
+                </div>
+                <div ng-if="question.Type == 'Matrix'">
+                    <z-checkbox checkbox-id="singleOnly" ng-click="singleSelection()" checkbox-model="question.Options.SingleSelect"></z-checkbox>
+                    <p><b>SINGLE</b> selection only.</p>
+                </div>
+                <div ng-if="question.Type == 'Date'">
+                    <z-datepicker style="width:200px;margin-right:10px" z-model="question.Options.MinDate"></z-datepicker>
+                    <p><b>MIN DATE</b> of characters allowed for the answer.</p>
+                </div>
+                <div ng-if="question.Type == 'Date'">
+                    <z-datepicker style="width:200px;margin-right:10px" z-model="question.Options.MaxDate"></z-datepicker>
+                    <p><b>MAX DATE</b> of characters allowed for the answer.</p>
+                </div>
+                <div ng-if="question.Type == 'Decimal'">
+                    <input type="text" only-digits ng-model="question.Options.MinDecimal" />
+                    <p><b>MIN DECIMAL</b> of characters allowed for the answer.</p>
+                </div>
+                <div ng-if="question.Type == 'Decimal'">
+                    <input type="text" only-digits ng-model="question.Options.MaxDecimal" />
+                    <p><b>MAX DECIMAL</b> of characters allowed for the answer.</p>
+                </div>
+                <div ng-if="question.Type == 'Essay'">
+                    <input type="text" only-digits ng-model="question.Options.MinLength" />
+                    <p><b>MIN LENGTH</b> of characters allowed for the answer.</p>
+                </div>
+                <div ng-if="question.Type == 'Essay'">
+                    <input type="text" only-digits ng-model="question.Options.MaxLength" />
+                    <p><b>MAX LENGTH</b> of characters allowed for the answer.</p>
+                </div>
+                <div ng-if="question.Type == 'TrueFalse'">
+                    <input type="text" ng-model="question.Options.PositiveValue" />
+                    <p><b>POSITIVE</b> value to be shown.</p>
+                </div>
+                <div ng-if="question.Type == 'TrueFalse'">
+                    <input type="text" ng-model="question.Options.NegativeValue" />
+                    <p><b>NEGATIVE</b> value to be shown.</p>
+                </div>
+            </z-check-list>
+        </z-tab-content>
+        <z-tab-content ng-class="{'appear': $parent.showTab == 'logic'}" ng-if="showTab == 'logic'">
+            <p>This probably wouldn't show up for a single answer question. Honestly.</p>
+        </z-tab-content>
+    </z-tab-menu>
+</question-editor>
+<cancel-action-btn style="right:{{universal.adjust80}}" title="Cancel Changes" ng-click="cancelChanges()">
+    <span class="cobox-delete"></span>
+</cancel-action-btn>
+<add-btn style="right:{{universal.adjust10}}" title="Save Question" class="save" ng-click="saveEdits()">
+    <span class="survey-save" ng-class="{'rotateIconOut': actionOpen == true}"></span>
+    <span class="cobox-delete" ng-class="{'rotateIconOut': actionOpen == false}"></span>
+</add-btn>

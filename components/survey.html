@@ -1,0 +1,22 @@
+﻿<side-bar></side-bar>
+<survey-creation id="fullcontainer">
+    <h1 id="intro">Welcome to your new survey!</h1>
+    <p>Begin by doing things. An explanation would be here.</p>
+    <input-label class="full">SURVEY NAME</input-label>
+    <input type="text" class="inpName full" style="max-width:600px" placeholder="Survey name..." ng-model="survey.Title" ng-keyup="resetTimer()" />
+    <survey-page ng-repeat="page in survey.Pages track by $index"></survey-page>
+</survey-creation>
+<top-bar style="width:{{universal.barWidth}}">
+    <bread-box class="current">
+        <inner-bread>1. Design</inner-bread>
+    </bread-box>
+    <bread-box id="second">
+        <inner-bread>2. Distribute</inner-bread>
+    </bread-box>
+    <bread-box id="third">
+        <inner-bread>3. Analyze</inner-bread>
+    </bread-box>
+    <z-icon-btn btn-icon="cobox-up" title="Back To Top" ng-click="toTop()" style="float:right;margin-top:10px;font-weight: bold;" id="toTop"></z-icon-btn>
+    <z-btn class="normal-btn" style="margin: 6px 5px 0 0;float: right;" btn-text="Preview" btn-icon="survey-preview" btn-animation="ripple"></z-btn>
+</top-bar>
+<reorder-pages ng-if="universal.show == 'reorder'"></reorder-pages>

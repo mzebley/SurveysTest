@@ -1,0 +1,55 @@
+﻿<question-wrapper>
+    <btn-wrapper>
+        <z-icon-btn btn-icon="survey-edit" title="Edit Question" ng-click="editQuestion(question, page)"></z-icon-btn>
+        <z-icon-btn style="margin-top:0" title="Delete Question" btn-background="rgba(250, 219, 216, .975)" btn-icon-color="#e54839" btn-icon="survey-trash" ng-click="removeQuestion($index, page)"></z-icon-btn>
+    </btn-wrapper>
+    <content-wrapper>
+        <span ng-bind-html="question.Body"></span>
+        <content-wrapper id="Essay" ng-if="question.Type == 'Essay'">
+            <p style="margin-top: 10px">
+                <textarea froala="universal.froalaOptions" ng-model="test"></textarea>
+            </p>
+        </content-wrapper>
+        <content-wrapper id="Multiple" ng-if="question.Type == 'Multiple'" ng-init="randomizeArray(question)">
+            <z-check-list>
+                <div ng-repeat="answer in question.Answers track by $index">
+                    <z-checkbox checkbox-id="{{answer.Id}}" checkbox-model="answer.IsSelected" ng-click="multiSelection(question, answer)"></z-checkbox>
+                    <span ng-bind-html="answer.Content"></span>
+                </div>
+            </z-check-list>
+        </content-wrapper>
+        <content-wrapper id="TrueFalse" ng-if="question.Type == 'TrueFalse'">
+            <z-check-list>
+                <div>
+                    <z-checkbox checkbox-id="question{{$index}}" checkbox-model="question.Answer"></z-checkbox>
+                    <p ng-bind-html="question.Options.PositiveValue" ng-show="question.Answer"></p>
+                    <p ng-bind-html="question.Options.NegativeValue" ng-show="!question.Answer"></p>
+                </div>
+            </z-check-list>
+        </content-wrapper>
+        <content-wrapper id="Decimal" ng-if="question.Type == 'Decimal'">
+            <input type="text" class="inpComment" placeholder="Answer..." style="max-width:200px" only-digits ng-model="question.Answer" ng-keyup="checkValDecimal(question, question.Answer)" />
+        </content-wrapper>
+        <content-wrapper id="Date" ng-if="question.Type == 'Date'">
+            <z-datepicker style="width:200px;margin-right:10px" z-model="question.Answer"></z-datepicker>
+        </content-wrapper>
+        <content-wrapper id="Matrix" ng-if="question.Type == 'Matrix'">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th ng-repeat="header in question.MatrixJSON[0].Columns" ng-bind-html="header.ColumnName"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in question.MatrixJSON track by $index">
+                        <td ng-bind-html="row.RowName"></td>
+                        <td id="selection" ng-repeat="cell in row.Columns track by $index" ng-click="matrixValidation(question, row, cell)">
+                            <z-checkbox checkbox-id="{{cell.Id}}" checkbox-model="cell.IsSelected" ng-click="matrixValidation(question, row, cell)"></z-checkbox>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </content-wrapper>
+    </content-wrapper>
+</question-wrapper>

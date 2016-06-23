@@ -1,0 +1,109 @@
+﻿<side-bar-wrapper id="newSurveyBar" ng-class="{'collapse': sideBarCollapsed}" ng-if="universal.show != 'qEditor'">
+    <expand-icon>
+        <span ng-if="sideBarCollapsed" class="cobox-menu-lines" title="Menu" ng-click="$parent.sideBarCollapsed = false"></span>
+        <span ng-if="!sideBarCollapsed" class="cobox-delete" ng-click="$parent.sideBarCollapsed = true"></span>
+    </expand-icon>
+    <sidebar-content class="animated fadeIn" ng-hide="sideBarCollapsed">
+        <h1>{{survey.Title}}</h1>
+        <div class="flexCenter">
+            <z-btn class="normal-btn" style="margin-bottom:-5px" btn-text="Save & Exit" btn-icon="survey-save" btn-animation="ripple"></z-btn>
+            <z-btn class="normal-btn" style="margin-bottom:-5px" btn-text="Save As Template" btn-icon="survey-sheet" btn-animation="ripple" ng-click="saveTemplate(page)"></z-btn>
+            <z-btn class="normal-btn" btn-text="Version Control" btn-icon="survey-survey" btn-animation="ripple"></z-btn>
+        </div>
+        <z-accordion z-accordion-action class="full">
+            <h3><span class="icon-plus"></span>COLLABORATORS</h3>
+            <z-accordion-sub>
+                <p ng-if="universal.drafts.length < 1">Looks like you don't currently have any drafts saved.</p>
+                <p style="width: 100%; margin-bottom:10px; border: dotted" ng-repeat="survey in universal.drafts track by $index" ng-click="openSurvey(survey)">
+                    <span>Title: {{survey.Title}}</span>
+                    <br />
+                    <span>Pages: {{survey.Pages.length}}</span>
+                </p>
+            </z-accordion-sub>
+            <h3><span class="icon-plus"></span>DETAILS</h3>
+            <z-accordion-sub>
+                <p ng-if="universal.templates.length < 1">Looks like you don't currently have any templates saved.</p>
+                <p style="width: 100%; margin-bottom:10px; border: dotted" ng-repeat="survey in universal.templates track by $index" ng-click="openSurvey(survey)">
+                    <span>Title: {{survey.Title}}</span>
+                    <br />
+                    <span>Pages: {{survey.Pages.length}}</span>
+                </p>
+            </z-accordion-sub>
+            <h3><span class="icon-plus"></span>COMPLETED</h3>
+            <z-accordion-sub>
+                <p ng-if="universal.completed.length < 1">Looks like you don't currently have any completed or in-progress surveys.</p>
+                <p style="width: 100%; margin-bottom:10px; border: dotted" ng-repeat="survey in universal.completed track by $index" ng-click="openSurvey(survey)">
+                    <span>Title: {{survey.Title}}</span>
+                    <br />
+                    <span>Pages: {{survey.Pages.length}}</span>
+                </p>
+            </z-accordion-sub>
+        </z-accordion>
+        <!--         <z-accordion z-accordion-action class="full">
+            <h3><span class="icon-plus"></span>DRAFTS</h3>
+            <z-accordion-sub>
+                <p ng-if="universal.drafts.length < 1">Looks like you don't currently have any drafts saved.</p>
+                <p style="width: 100%; margin-bottom:10px; border: dotted" ng-repeat="survey in universal.drafts track by $index" ng-click="openSurvey(survey)">
+                    <span>Title: {{survey.Title}}</span>
+                    <br />
+                    <span>Pages: {{survey.Pages.length}}</span>
+                </p>
+            </z-accordion-sub>
+            <h3><span class="icon-plus"></span>TEMPLATES</h3>
+            <z-accordion-sub>
+                <p ng-if="universal.templates.length < 1">Looks like you don't currently have any templates saved.</p>
+                <p style="width: 100%; margin-bottom:10px; border: dotted" ng-repeat="survey in universal.templates track by $index" ng-click="openSurvey(survey)">
+                    <span>Title: {{survey.Title}}</span>
+                    <br />
+                    <span>Pages: {{survey.Pages.length}}</span>
+                </p>
+            </z-accordion-sub>
+            <h3><span class="icon-plus"></span>COMPLETED</h3>
+            <z-accordion-sub>
+                <p ng-if="universal.completed.length < 1">Looks like you don't currently have any completed or in-progress surveys.</p>
+                <p style="width: 100%; margin-bottom:10px; border: dotted" ng-repeat="survey in universal.completed track by $index" ng-click="openSurvey(survey)">
+                    <span>Title: {{survey.Title}}</span>
+                    <br />
+                    <span>Pages: {{survey.Pages.length}}</span>
+                </p>
+            </z-accordion-sub>
+        </z-accordion> -->
+    </sidebar-content>
+</side-bar-wrapper>
+<side-bar-wrapper id="EditQuestionBar" ng-if="universal.show == 'qEditor'">
+    <input-label class="full">ITEM TYPES</input-label>
+    <z-accordion z-accordion-action style="margin-left: 10px">
+        <h3 ng-click="changeQuestion('Content')"><span class="icon-plus"></span>Content Box</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'Content'}" style="width: calc(100% - 10px)">
+            This is a content box will display text, pictures, links, and even videos for the user to review or to be used as a page title.
+        </z-accordion-sub>
+        <h3 ng-click="changeQuestion('Essay')"><span class="icon-plus"></span>Essay Question</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'Essay'}" style="width: calc(100% - 10px)">
+            This is an essay question that allows the user to type up to as many character as specified. The default character limit is set to 1200 and can be adjusted in the <b>OPTIONS</b> tab.
+        </z-accordion-sub>
+        <h3 ng-click="changeQuestion('Multiple')"><span class="icon-plus"></span>Multiple Choice</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'Multiple'}" style="width: calc(100% - 10px)">
+            This is a multiple choice question allowing the user to select from a set of answers. In the <b>OPTIONS</b> tab you can specify whether the user can select multiple items or only one. This item also allows you to set the navigation based on the selected answer in the <b>LOGIC</b> tab.
+        </z-accordion-sub>
+        <h3 ng-click="changeQuestion('TrueFalse')"><span class="icon-plus"></span>True / False</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'TrueFalse'}" style="width: calc(100% - 10px)">
+            This is a multiple choice question allowing the user to select from a set of answers. In the <b>OPTIONS</b> tab you can specify whether the user can select multiple items or only one. This item also allows you to set the navigation based on the selected answer in the <b>LOGIC</b> tab.
+        </z-accordion-sub>
+        <h3 ng-click="changeQuestion('Date')"><span class="icon-plus"></span>Date Question</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'Date'}" style="width: calc(100% - 10px)">
+            This is a multiple choice question allowing the user to select from a set of answers. In the <b>OPTIONS</b> tab you can specify whether the user can select multiple items or only one. This item also allows you to set the navigation based on the selected answer in the <b>LOGIC</b> tab.
+        </z-accordion-sub>
+        <h3 ng-click="changeQuestion('Decimal')"><span class="icon-plus"></span>Decimal Question</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'Decimal'}" style="width: calc(100% - 10px)">
+            This is a multiple choice question allowing the user to select from a set of answers. In the <b>OPTIONS</b> tab you can specify whether the user can select multiple items or only one. This item also allows you to set the navigation based on the selected answer in the <b>LOGIC</b> tab.
+        </z-accordion-sub>
+        <h3 ng-click="changeQuestion('Matrix')"><span class="icon-plus"></span>Matrix Question</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'Matrix'}" style="width: calc(100% - 10px)">
+            This is a multiple choice question allowing the user to select from a set of answers. In the <b>OPTIONS</b> tab you can specify whether the user can select multiple items or only one. This item also allows you to set the navigation based on the selected answer in the <b>LOGIC</b> tab.
+        </z-accordion-sub>
+        <h3 ng-click="changeQuestion('Availability')"><span class="icon-plus"></span>Availabilty</h3>
+        <z-accordion-sub ng-class="{'defaultOpen': question.Type == 'Matrix'}" style="width: calc(100% - 10px)">
+            This is a multiple choice question allowing the user to select from a set of answers. In the <b>OPTIONS</b> tab you can specify whether the user can select multiple items or only one. This item also allows you to set the navigation based on the selected answer in the <b>LOGIC</b> tab.
+        </z-accordion-sub>
+    </z-accordion>
+</side-bar-wrapper>

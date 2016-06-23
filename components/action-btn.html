@@ -1,0 +1,14 @@
+﻿<easy-dismissal class="blackened" ng-class="{'extraBlack': universal.show == 'reorder'}" ng-if="actionOpen == true || universal.show == 'reorder'" ng-click="$parent.actionOpen=false"></easy-dismissal>
+
+<add-item-wrapper id="second" ng-style="{'right': $parent.universal.adjust20}" ng-click="toggleAction();$parent.universal.show = 'reorder';$parent.universal.showEditorAB = false" ng-class="{'opened': actionOpen == true}">
+    <span class="survey-rearrange"></span>
+    <p>Reorder pages</p>
+</add-item-wrapper>
+<add-item-wrapper ng-style="{'right': $parent.universal.adjust20}" ng-class="{'opened': actionOpen == true}" ng-click="addPage()">
+    <span class="survey-new-page creation" style="font-size: 18px;line-height: 40px;" ></span>
+    <p>Add a page</p>
+</add-item-wrapper>
+<add-btn ng-style="{'right': $parent.$parent.universal.adjust10}" ng-if="$parent.universal.showEditorAB" ng-class="{'opened': actionOpen == true }" ng-click="toggleAction();">
+    <span class="survey-sheet" ng-class="{'rotateIconOut': actionOpen == true}"></span>
+    <span class="cobox-delete" ng-class="{'rotateIconOut': actionOpen == false}"></span>
+</add-btn>

@@ -1,0 +1,36 @@
+﻿<page-wrapper id="page{{$index}}">
+    <page-nbr>PAGE {{$index + 1}}</page-nbr>
+    <page-title>
+        <z-icon-btn ng-if="titleEdit == false" btn-animation="ripple" title="Edit Page Title" btn-icon="survey-edit" ng-click="editTitle(page)" style="margin-left:0;margin-right:10px"></z-icon-btn>
+        <title-content ng-if="titleEdit == false" ng-bind-html="page.Title"></title-content>
+        <div ng-if="titleEdit == true" class="animated fadeIn">
+            <textarea froala="universal.froalaOptions" ng-model="page.Title"></textarea>
+        </div>
+        <btn-container style="margin-top: 0;border-bottom: 1px dashed #ddd;" class="animated fadeIn" ng-if="titleEdit == true">
+            <z-icon-btn btn-icon="cobox-delete" btn-animation="ripple" title="Cancel" btn-background="rgba(250, 219, 216, .975)" btn-icon-color="#e54839" ng-click="cancelEdit(page)"></z-icon-btn>
+            <z-icon-btn btn-icon="survey-save" btn-animation="ripple" btn-background="rgba(108, 167, 24, .2)" btn-icon-color="rgba(108, 167, 24, 1)" title="Save Changes" style="margin-left:0;margin-bottom:10px" ng-click="saveTitle(page)"></z-icon-btn>
+        </btn-container>
+    </page-title>
+    <survey-question ng-repeat="question in page.Questions track by $index"></survey-question>
+    <div class="flexCenter">
+        <!-- <z-btn class="submit-btn" btn-text="Add An Item" btn-icon="survey-new" ng-click="addQuestion(page)"></z-btn> -->
+        <new-page-btn ng-click="addQuestion(page)" style="margin-top:20px;">
+            <p><span class="survey-new"></span>Add an item...</p>
+        </new-page-btn>
+    </div>
+    <div class="flexCenter" style="margin-bottom:10px">
+        <z-btn class="normal-btn" btn-text="Prev" ng-click="pageUp($index)" btn-icon="cobox-left" btn-animation="ripple" ng-if="$index != 0"></z-btn>
+        <z-btn class="normal-btn" ng-click="pageDown($index)" btn-text="Next" btn-icon-right="cobox-right" btn-animation="ripple" ng-if="($index + 1) != survey.Pages.length"></z-btn>
+        <z-btn class="submit-btn" btn-text="Submit" btn-animation="ripple" ng-if="($index + 1) == survey.Pages.length"></z-btn>
+    </div>
+    <page-edit-wrapper class="flexCenter">
+        <z-btn class="cancel-btn" btn-animation="ripple" btn-text="Delete Page {{$index + 1}}" ng-click="removePage(page)" btn-icon="survey-trash"></z-btn>
+    </page-edit-wrapper>
+</page-wrapper>
+<div class="flexCenter" ng-class="{'marginPlus': survey.Pages.length == ($index + 1)}">
+    <new-page-btn ng-click="addPage($index)">
+        <p ng-if="survey.Pages.length != ($index + 1)"><span class="survey-sheet"></span>Insert a new page...</p>
+        <p ng-if="survey.Pages.length == ($index + 1)"><span class="survey-sheet"></span>Add a new page...</p>
+    </new-page-btn>
+</div>
+<survey-edit-question ng-if="universal.show == 'qEditor'"></survey-edit-question>

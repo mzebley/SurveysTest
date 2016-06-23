@@ -1,0 +1,16 @@
+﻿<div class="flexCenter animated fadeIn">
+    <h1>Reorder your pages.</h1>
+    <h2>Drag and drop your pages to place them where they need to be.</h2>
+    <div class="flexCenter" dnd-list="pages" style="position:relative" ng-sortable="pageReordering">
+        <page-reorder-item ng-repeat="page in $parent.survey.Pages" title="{{page.Title}}">
+            <span>PAGE</span>
+            <p>{{page.PageNbr}}</p>
+        </page-reorder-item>
+    </div>
+    <cancel-action-btn ng-style="{'right': universal.adjust80}" title="Cancel Changes" ng-click="cancelReorder();">
+        <span class="cobox-delete"></span>
+    </cancel-action-btn>
+    <add-btn ng-style="{'right': universal.adjust10}" title="Save Page Order" class="save" ng-click="saveReorder();">
+        <span class="survey-save"></span>
+    </add-btn>
+</div>

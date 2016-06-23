@@ -1,0 +1,32 @@
+<div>
+    <p style="width: 100%">
+        <span>Welcome to the survey machine</span>
+        <br />
+        <br />
+        Please select whether you would like to start a new survey, continue an existing survey, create one from a template or view results of a completed / in-progress survey.
+    </p>
+    <z-btn btn-text="New" class="submit-btn" btn-load-variable="universal.newLoad" btn-animation="ripple" ng-click="universal.newSurvey();"></z-btn>
+
+    <z-tab-menu z-full-tab>
+        <z-tab-buttons>
+            <h3 class="current"><a href="#drafts">Drafts</a></h3>
+            <h3><a href="#temps">Templates</a></h3>
+            <h3><a href="#results">Results</a></h3>
+        </z-tab-buttons>
+        <z-tab-content id="drafts" class="appear">
+            <p ng-if="universal.drafts.length < 1">Looks like you don't currently have any drafts saved.</p>
+
+            <p style="width: 100%; margin-bottom:10px; border: dotted" ng-repeat="survey in universal.drafts track by $index" ng-click="universal.openSurvey(survey)">
+                <span>Title: {{survey.Title}}</span> <br/>
+                <span>Pages: {{survey.Pages.length}}</span>
+            </p>
+        </z-tab-content>
+        <z-tab-content id="temps">
+            <p ng-if="universal.templates.length < 1">Looks like you don't currently have any templates saved.</p>
+        </z-tab-content>
+        <z-tab-content id="results">
+            <p ng-if="universal.completed.length < 1">Looks like you don't currently have any completed or in-progress surveys.</p>
+        </z-tab-content>
+    </z-tab-menu>
+
+</div>
